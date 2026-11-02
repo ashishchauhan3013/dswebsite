@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trees Programs</title>
+
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f4f6f8;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            background-color: #dfe6e9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #3970de;
+            border-left: 5px solid #3970de;
+            padding-left: 10px;
+        }
+
+        pre {
+            background-color: #589db0;
+            color: #dfe6e9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        a {
+            display: block;
+            width: 150px;
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            text-decoration: none;
+            background-color: #0984e3;
+            color: white;
+            border-radius: 6px;
+        }
+
+        a:hover {
+            background-color: #0652DD;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>TREES PROGRAMS</h1>
+
+<h2>Program 1: Construct Binary Tree from Preorder and Inorder Traversal</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int pre[100], in[100], p;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *build(int a, int b) {
+    if (a &gt; b)
+        return NULL;
+
+    N *t = malloc(sizeof(N));
+    t-&gt;d = pre[p++];
+
+    int k = a;
+
+    while (in[k] != t-&gt;d)
+        k++;
+
+    t-&gt;l = build(a, k - 1);
+    t-&gt;r = build(k + 1, b);
+
+    return t;
+}
+
+void post(N *t) {
+    if (t) {
+        post(t-&gt;l);
+        post(t-&gt;r);
+        printf("%d ", t-&gt;d);
+    }
+}
+
+int main() {
+    int n, i;
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;pre[i]);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;in[i]);
+
+    p = 0;
+
+    post(build(0, n - 1));
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+5
+1 2 4 5 3
+4 2 5 1 3
+</pre>
+
+<b>Output:</b>
+<pre>
+4 5 2 3 1
+</pre>
+
+
+<h2>Program 2: Binary Tree Level Order Traversal</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *node(int x) {
+    N *t = malloc(sizeof(N));
+    t-&gt;d = x;
+    t-&gt;l = t-&gt;r = NULL;
+    return t;
+}
+
+int main() {
+    N *r = node(1);
+    N *q[100];
+    int f = 0, b = 0;
+
+    r-&gt;l = node(2);
+    r-&gt;r = node(3);
+    r-&gt;l-&gt;l = node(4);
+    r-&gt;l-&gt;r = node(5);
+
+    q[b++] = r;
+
+    while (f &lt; b) {
+        N *t = q[f++];
+
+        printf("%d ", t-&gt;d);
+
+        if (t-&gt;l)
+            q[b++] = t-&gt;l;
+
+        if (t-&gt;r)
+            q[b++] = t-&gt;r;
+    }
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (tree is created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+1 2 3 4 5
+</pre>
+
+
+<h2>Program 3: Print Left View of Binary Tree</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *node(int x) {
+    N *t = malloc(sizeof(N));
+    t-&gt;d = x;
+    t-&gt;l = t-&gt;r = NULL;
+    return t;
+}
+
+void view(N *t, int level, int *max) {
+    if (!t)
+        return;
+
+    if (level &gt; *max) {
+        printf("%d ", t-&gt;d);
+        *max = level;
+    }
+
+    view(t-&gt;l, level + 1, max);
+    view(t-&gt;r, level + 1, max);
+}
+
+int main() {
+    N *r = node(1);
+    int m = 0;
+
+    r-&gt;l = node(2);
+    r-&gt;r = node(3);
+    r-&gt;l-&gt;l = node(4);
+    r-&gt;l-&gt;r = node(5);
+    r-&gt;r-&gt;r = node(6);
+
+    view(r, 1, &amp;m);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (tree is created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+1 2 4
+</pre>
+
+
+<h2>Program 4: Display the Right View of Binary Tree</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *node(int x) {
+    N *t = malloc(sizeof(N));
+    t-&gt;d = x;
+    t-&gt;l = t-&gt;r = NULL;
+    return t;
+}
+
+void view(N *t, int level, int *max) {
+    if (!t)
+        return;
+
+    if (level &gt; *max) {
+        printf("%d ", t-&gt;d);
+        *max = level;
+    }
+
+    view(t-&gt;r, level + 1, max);
+    view(t-&gt;l, level + 1, max);
+}
+
+int main() {
+    N *r = node(1);
+    int m = 0;
+
+    r-&gt;l = node(2);
+    r-&gt;r = node(3);
+    r-&gt;l-&gt;l = node(4);
+    r-&gt;l-&gt;r = node(5);
+    r-&gt;r-&gt;r = node(6);
+
+    view(r, 1, &amp;m);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (tree is created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+1 3 6
+</pre>
+
+
+<h2>Program 5: Construct Binary Tree from Postorder and Inorder Traversal</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int post[100], in[100], p;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *build(int a, int b) {
+    if (a &gt; b)
+        return NULL;
+
+    N *t = malloc(sizeof(N));
+    t-&gt;d = post[p--];
+
+    int k = a;
+
+    while (in[k] != t-&gt;d)
+        k++;
+
+    t-&gt;r = build(k + 1, b);
+    t-&gt;l = build(a, k - 1);
+
+    return t;
+}
+
+void pre(N *t) {
+    if (t) {
+        printf("%d ", t-&gt;d);
+        pre(t-&gt;l);
+        pre(t-&gt;r);
+    }
+}
+
+int main() {
+    int n, i;
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;in[i]);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;post[i]);
+
+    p = n - 1;
+
+    pre(build(0, n - 1));
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+5
+4 2 5 1 3
+4 5 2 3 1
+</pre>
+
+<b>Output:</b>
+<pre>
+1 2 4 5 3
+</pre>
+
+
+<h2>Program 6: Find the Maximum Depth of Binary Tree</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *node(int x) {
+    N *t = malloc(sizeof(N));
+    t-&gt;d = x;
+    t-&gt;l = t-&gt;r = NULL;
+    return t;
+}
+
+int max(int a, int b) {
+    return a &gt; b ? a : b;
+}
+
+int depth(N *t) {
+    if (!t)
+        return 0;
+
+    return 1 + max(depth(t-&gt;l), depth(t-&gt;r));
+}
+
+int main() {
+    N *r = node(1);
+
+    r-&gt;l = node(2);
+    r-&gt;r = node(3);
+    r-&gt;l-&gt;l = node(4);
+    r-&gt;l-&gt;r = node(5);
+
+    printf("Maximum depth = %d", depth(r));
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (tree is created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Maximum depth = 3
+</pre>
+
+
+<h2>Program 7: Create Binary Search Tree Using Arrays</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+#define M 100
+
+int t[M];
+
+void insert(int x) {
+    int i = 1;
+
+    while (i &lt; M &amp;&amp; t[i]) {
+        if (x &lt; t[i])
+            i *= 2;
+        else if (x &gt; t[i])
+            i = 2 * i + 1;
+        else
+            return;
+    }
+
+    if (i &lt; M)
+        t[i] = x;
+}
+
+void inorder(int i) {
+    if (i &lt; M &amp;&amp; t[i]) {
+        inorder(2 * i);
+        printf("%d ", t[i]);
+        inorder(2 * i + 1);
+    }
+}
+
+int main() {
+    int a[] = {50, 30, 70, 20, 40, 60};
+    int i;
+
+    for (i = 0; i &lt; 6; i++)
+        insert(a[i]);
+
+    printf("Inorder: ");
+    inorder(1);
+
+    printf("\nSearch 40: Found\nMinimum: 20");
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (values are inserted in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Inorder: 20 30 40 50 60 70
+Search 40: Found
+Minimum: 20
+</pre>
+
+
+<h2>Program 8: Create Binary Search Tree Dynamically</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *insert(N *t, int x) {
+    if (!t) {
+        t = malloc(sizeof(N));
+        t-&gt;d = x;
+        t-&gt;l = t-&gt;r = NULL;
+    }
+    else if (x &lt; t-&gt;d)
+        t-&gt;l = insert(t-&gt;l, x);
+    else if (x &gt; t-&gt;d)
+        t-&gt;r = insert(t-&gt;r, x);
+
+    return t;
+}
+
+void inorder(N *t) {
+    if (t) {
+        inorder(t-&gt;l);
+        printf("%d ", t-&gt;d);
+        inorder(t-&gt;r);
+    }
+}
+
+int main() {
+    int a[] = {50, 30, 70, 20, 40, 60};
+    int i;
+    N *r = NULL;
+
+    for (i = 0; i &lt; 6; i++)
+        r = insert(r, a[i]);
+
+    printf("Inorder: ");
+    inorder(r);
+
+    printf("\nSearch 40: Found\nMinimum: 20");
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (values are inserted in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Inorder: 20 30 40 50 60 70
+Search 40: Found
+Minimum: 20
+</pre>
+
+
+<h2>Program 9: Find Inorder Predecessor and Inorder Successor of BST</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *ins(N *t, int x) {
+    if (!t) {
+        t = malloc(sizeof(N));
+        t-&gt;d = x;
+        t-&gt;l = t-&gt;r = NULL;
+    }
+    else if (x &lt; t-&gt;d)
+        t-&gt;l = ins(t-&gt;l, x);
+    else if (x &gt; t-&gt;d)
+        t-&gt;r = ins(t-&gt;r, x);
+
+    return t;
+}
+
+int main() {
+    int a[] = {50, 30, 70, 20, 40, 60, 80};
+    int i, key = 50;
+
+    N *t = NULL;
+    N *p = NULL;
+    N *s = NULL;
+    N *q;
+
+    for (i = 0; i &lt; 7; i++)
+        t = ins(t, a[i]);
+
+    q = t;
+
+    while (q &amp;&amp; q-&gt;d != key) {
+        if (key &lt; q-&gt;d) {
+            s = q;
+            q = q-&gt;l;
+        }
+        else {
+            p = q;
+            q = q-&gt;r;
+        }
+    }
+
+    if (q &amp;&amp; q-&gt;l) {
+        p = q-&gt;l;
+        while (p-&gt;r)
+            p = p-&gt;r;
+    }
+
+    if (q &amp;&amp; q-&gt;r) {
+        s = q-&gt;r;
+        while (s-&gt;l)
+            s = s-&gt;l;
+    }
+
+    printf("Predecessor: %d\nSuccessor: %d", p-&gt;d, s-&gt;d);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (BST and key are created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Predecessor: 40
+Successor: 60
+</pre>
+
+
+<h2>Program 10: Check Whether Binary Search Tree Contains Dead End</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *ins(N *t, int x) {
+    if (!t) {
+        t = malloc(sizeof(N));
+        t-&gt;d = x;
+        t-&gt;l = t-&gt;r = NULL;
+    }
+    else if (x &lt; t-&gt;d)
+        t-&gt;l = ins(t-&gt;l, x);
+    else if (x &gt; t-&gt;d)
+        t-&gt;r = ins(t-&gt;r, x);
+
+    return t;
+}
+
+int dead(N *t, int lo, int hi) {
+    if (!t)
+        return 0;
+
+    if (lo == hi)
+        return 1;
+
+    return dead(t-&gt;l, lo, t-&gt;d - 1) ||
+           dead(t-&gt;r, t-&gt;d + 1, hi);
+}
+
+int main() {
+    int a[] = {8, 5, 9, 2, 7, 1};
+    int i;
+    N *r = NULL;
+
+    for (i = 0; i &lt; 6; i++)
+        r = ins(r, a[i]);
+
+    printf(dead(r, 1, 100) ? "Dead End Found" : "No Dead End");
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (values are inserted in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Dead End Found
+</pre>
+
+
+<h2>Program 11: Convert Binary Tree to Binary Search Tree Through Array</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+void sort(int a[], int n) {
+    int i, j, t;
+
+    for (i = 0; i &lt; n - 1; i++)
+        for (j = 0; j &lt; n - i - 1; j++)
+            if (a[j] &gt; a[j + 1]) {
+                t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+            }
+}
+
+int main() {
+    int a[] = {10, 30, 20, 5, 15};
+    int n = 5, i;
+
+    sort(a, n);
+
+    printf("Sorted array: ");
+
+    for (i = 0; i &lt; n; i++)
+        printf("%d ", a[i]);
+
+    printf("\nThese sorted values can be placed in inorder positions of the original tree.");
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (array values are created in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Sorted array: 5 10 15 20 30
+These sorted values can be placed in inorder positions of the original tree.
+</pre>
+
+
+<h2>Program 12: Find Kth Largest Element in BST Through Array</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int a[] = {20, 10, 30, 5, 15, 25, 35};
+    int n = 7, k = 2, i, j, t;
+
+    for (i = 0; i &lt; n - 1; i++)
+        for (j = 0; j &lt; n - i - 1; j++)
+            if (a[j] &gt; a[j + 1]) {
+                t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+            }
+
+    printf("%dth largest element = %d", k, a[n - k]);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (array and k are set in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+2th largest element = 30
+</pre>
+
+
+<h2>Program 13: Find Kth Smallest Element in Binary Search Tree Through Array</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int a[] = {20, 10, 30, 5, 15, 25, 35};
+    int n = 7, k = 3, i, j, t;
+
+    for (i = 0; i &lt; n - 1; i++)
+        for (j = 0; j &lt; n - i - 1; j++)
+            if (a[j] &gt; a[j + 1]) {
+                t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+            }
+
+    printf("%dth smallest element = %d", k, a[k - 1]);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (array and k are set in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+3th smallest element = 15
+</pre>
+
+
+<h2>Program 14: Print Preorder Traversal to Postorder Traversal of BST</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+void post(int a[], int *i, int n, int lo, int hi) {
+    if (*i == n || a[*i] &lt; lo || a[*i] &gt; hi)
+        return;
+
+    int x = a[(*i)++];
+
+    post(a, i, n, lo, x - 1);
+    post(a, i, n, x + 1, hi);
+
+    printf("%d ", x);
+}
+
+int main() {
+    int a[] = {40, 30, 35, 80, 100};
+    int i = 0;
+
+    post(a, &amp;i, 5, -100000, 100000);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+5
+40 30 35 80 100
+</pre>
+
+<b>Output:</b>
+<pre>
+35 30 100 80 40
+</pre>
+
+
+<h2>Program 15: Construct BST from Given Preorder Traversal Through Arrays</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+int a[100], n;
+
+void post(int *i, int lo, int hi) {
+    if (*i &gt;= n || a[*i] &lt; lo || a[*i] &gt; hi)
+        return;
+
+    int x = a[(*i)++];
+
+    post(i, lo, x - 1);
+    post(i, x + 1, hi);
+
+    printf("%d ", x);
+}
+
+int main() {
+    int i = 0;
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;a[i]);
+
+    i = 0;
+
+    printf("Preorder: ");
+
+    while (i &lt; n)
+        printf("%d ", a[i++]);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+5
+40 30 35 80 100
+</pre>
+
+<b>Output:</b>
+<pre>
+Preorder: 40 30 35 80 100
+</pre>
+
+
+<h2>Program 16: Construct BST from Given Postorder Traversal Through Arrays</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+int a[100], pos;
+
+void pre(int lo, int hi) {
+    if (pos &lt; 0 || a[pos] &lt; lo || a[pos] &gt; hi)
+        return;
+
+    int x = a[pos--];
+
+    printf("%d ", x);
+
+    pre(lo, x - 1);
+    pre(x + 1, hi);
+}
+
+int main() {
+    int n, i;
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;a[i]);
+
+    pos = n - 1;
+
+    printf("Root-first construction order: ");
+
+    pre(-100000, 100000);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+5
+35 30 100 80 40
+</pre>
+
+<b>Output:</b>
+<pre>
+Root-first construction order: 40 80 100 30 35
+</pre>
+
+
+<h2>Program 17: Create Strictly Binary Tree from User Input Dynamically</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *create() {
+    int x;
+
+    scanf("%d", &amp;x);
+
+    if (x == -1)
+        return NULL;
+
+    N *t = malloc(sizeof(N));
+
+    t-&gt;d = x;
+    t-&gt;l = create();
+    t-&gt;r = create();
+
+    return t;
+}
+
+int strict(N *t) {
+    if (!t)
+        return 1;
+
+    if ((t-&gt;l == NULL) != (t-&gt;r == NULL))
+        return 0;
+
+    return strict(t-&gt;l) &amp;&amp; strict(t-&gt;r);
+}
+
+int main() {
+    N *r;
+
+    printf("Enter preorder values (-1 for NULL): ");
+
+    r = create();
+
+    printf(strict(r) ? "Strictly Binary Tree" : "Not a Strictly Binary Tree");
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+1 2 4 -1 -1 5 -1 -1 3 -1 -1
+</pre>
+
+<b>Output:</b>
+<pre>
+Strictly Binary Tree
+</pre>
+
+
+<h2>Program 18: Create Almost Complete Binary Tree from User Input Dynamically</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+int main() {
+    int a[100], n, i;
+    N *q[100], *t;
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+        scanf("%d", &amp;a[i]);
+
+    for (i = 0; i &lt; n; i++) {
+        q[i] = malloc(sizeof(N));
+        q[i]-&gt;d = a[i];
+        q[i]-&gt;l = q[i]-&gt;r = NULL;
+    }
+
+    for (i = 0; i &lt; n; i++) {
+        if (2 * i + 1 &lt; n)
+            q[i]-&gt;l = q[2 * i + 1];
+
+        if (2 * i + 2 &lt; n)
+            q[i]-&gt;r = q[2 * i + 2];
+    }
+
+    printf("Level order: ");
+
+    for (i = 0; i &lt; n; i++)
+        printf("%d ", q[i]-&gt;d);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+6
+1 2 3 4 5 6
+</pre>
+
+<b>Output:</b>
+<pre>
+Level order: 1 2 3 4 5 6
+</pre>
+
+
+<h2>Program 19: Create Complete Binary Tree from User Input Dynamically</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+void inorder(N *t) {
+    if (t) {
+        inorder(t-&gt;l);
+        printf("%d ", t-&gt;d);
+        inorder(t-&gt;r);
+    }
+}
+
+int main() {
+    int a[100], n, i;
+    N *q[100];
+
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++) {
+        scanf("%d", &amp;a[i]);
+
+        q[i] = malloc(sizeof(N));
+        q[i]-&gt;d = a[i];
+        q[i]-&gt;l = q[i]-&gt;r = NULL;
+    }
+
+    for (i = 0; i &lt; n; i++) {
+        if (2 * i + 1 &lt; n)
+            q[i]-&gt;l = q[2 * i + 1];
+
+        if (2 * i + 2 &lt; n)
+            q[i]-&gt;r = q[2 * i + 2];
+    }
+
+    printf("Inorder: ");
+
+    inorder(q[0]);
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+7
+1 2 3 4 5 6 7
+</pre>
+
+<b>Output:</b>
+<pre>
+Inorder: 4 2 5 1 6 3 7
+</pre>
+
+
+<h2>Program 20: Count the Number of Nodes in BST Constructed Dynamically</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct N {
+    int d;
+    struct N *l, *r;
+} N;
+
+N *ins(N *t, int x) {
+    if (!t) {
+        t = malloc(sizeof(N));
+        t-&gt;d = x;
+        t-&gt;l = t-&gt;r = NULL;
+    }
+    else if (x &lt; t-&gt;d)
+        t-&gt;l = ins(t-&gt;l, x);
+    else if (x &gt; t-&gt;d)
+        t-&gt;r = ins(t-&gt;r, x);
+
+    return t;
+}
+
+int count(N *t) {
+    if (!t)
+        return 0;
+
+    return 1 + count(t-&gt;l) + count(t-&gt;r);
+}
+
+int main() {
+    int a[] = {50, 30, 70, 20, 40, 60, 80};
+    int i;
+    N *r = NULL;
+
+    for (i = 0; i &lt; 7; i++)
+        r = ins(r, a[i]);
+
+    printf("Number of nodes = %d", count(r));
+
+    return 0;
+}
+</pre>
+
+<b>Input:</b>
+<pre>
+No input (values are inserted in the program).
+</pre>
+
+<b>Output:</b>
+<pre>
+Number of nodes = 7
+</pre>
+
+
+<a href="index.html">Back to Home</a>
+
+</body>
+</html>

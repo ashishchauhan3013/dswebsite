@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Searching Algorithms Programs</title>
+
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f4f6f8;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            background-color: #dfe6e9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #3970de;
+            border-left: 5px solid #3970de;
+            padding-left: 10px;
+        }
+
+        pre {
+            background-color: #589db0;
+            color: #dfe6e9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        a {
+            display: block;
+            width: 150px;
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #0984e3;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        a:hover {
+            background-color: #0652DD;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>SEARCHING ALGORITHMS PROGRAMS</h1>
+
+<h2>Program 1: Linear Search Through Iteration on Integer Array</h2>
+
+<pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, key, i, found = 0;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter array elements:\n");
+
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf("%d", &amp;a[i]);
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] == key)
+        {
+            printf("Element found at position %d", i + 1);
+            found = 1;
+            break;
+        }
+    }
+
+    if (found == 0)
+    {
+        printf("Element not found");
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter array elements:
+10 20 30 40 50
+Enter value to search: 30</pre>
+
+<b>Output:</b>
+<pre>Element found at position 3</pre>
+
+<h2>Program 2: Linear Search Through Recursion on String</h2>
+
+<pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int linearSearch(char str[], char key, int i)
+{
+    if (str[i] == '\0')
+    {
+        return -1;
+    }
+
+    if (str[i] == key)
+    {
+        return i;
+    }
+
+    return linearSearch(str, key, i + 1);
+}
+
+int main()
+{
+    char str[100], key;
+    int result;
+
+    printf("Enter a string: ");
+    scanf("%s", str);
+
+    printf("Enter character to search: ");
+    scanf(" %c", &amp;key);
+
+    result = linearSearch(str, key, 0);
+
+    if (result == -1)
+    {
+        printf("Character not found");
+    }
+    else
+    {
+        printf("Character found at position %d", result + 1);
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter a string: COMPUTER
+Enter character to search: P</pre>
+
+<b>Output:</b>
+<pre>Character found at position 4</pre>
+
+<h2>Program 3: Linear Search Through Recursion on Integer Array</h2>
+
+<pre>#include &lt;stdio.h&gt;
+
+int linearSearch(int a[], int n, int key, int i)
+{
+    if (i == n)
+    {
+        return -1;
+    }
+
+    if (a[i] == key)
+    {
+        return i;
+    }
+
+    return linearSearch(a, n, key, i + 1);
+}
+
+int main()
+{
+    int a[100], n, key, i, result;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter array elements:\n");
+
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf("%d", &amp;a[i]);
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    result = linearSearch(a, n, key, 0);
+
+    if (result == -1)
+    {
+        printf("Element not found");
+    }
+    else
+    {
+        printf("Element found at position %d", result + 1);
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter array elements:
+10 20 30 40 50
+Enter value to search: 40</pre>
+
+<b>Output:</b>
+<pre>Element found at position 4</pre>
+
+<h2>Program 4: Linear Search Through Iteration on String</h2>
+
+<pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    char str[100], key;
+    int i, found = 0;
+
+    printf("Enter a string: ");
+    scanf("%s", str);
+
+    printf("Enter character to search: ");
+    scanf(" %c", &amp;key);
+
+    for (i = 0; str[i] != '\0'; i++)
+    {
+        if (str[i] == key)
+        {
+            printf("Character found at position %d", i + 1);
+            found = 1;
+            break;
+        }
+    }
+
+    if (found == 0)
+    {
+        printf("Character not found");
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter a string: COMPUTER
+Enter character to search: U</pre>
+
+<b>Output:</b>
+<pre>Character found at position 6</pre>
+
+<h2>Program 5: Binary Search Through Iteration on Integer Array</h2>
+
+<pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, key, low, high, mid, i;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter sorted array elements:\n");
+
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf("%d", &amp;a[i]);
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    low = 0;
+    high = n - 1;
+
+    while (low &lt;= high)
+    {
+        mid = (low + high) / 2;
+
+        if (a[mid] == key)
+        {
+            printf("Element found at position %d", mid + 1);
+            return 0;
+        }
+        else if (key &lt; a[mid])
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+
+    printf("Element not found");
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter sorted array elements:
+10 20 30 40 50
+Enter value to search: 40</pre>
+
+<b>Output:</b>
+<pre>Element found at position 4</pre>
+
+<h2>Program 6: Binary Search Through Recursion on String</h2>
+
+<pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int binarySearch(char str[], char key, int low, int high)
+{
+    int mid;
+
+    if (low &gt; high)
+    {
+        return -1;
+    }
+
+    mid = (low + high) / 2;
+
+    if (str[mid] == key)
+    {
+        return mid;
+    }
+
+    if (key &lt; str[mid])
+    {
+        return binarySearch(str, key, low, mid - 1);
+    }
+
+    return binarySearch(str, key, mid + 1, high);
+}
+
+int main()
+{
+    char str[100], key;
+    int result, n;
+
+    printf("Enter a sorted string: ");
+    scanf("%s", str);
+
+    n = strlen(str);
+
+    printf("Enter character to search: ");
+    scanf(" %c", &amp;key);
+
+    result = binarySearch(str, key, 0, n - 1);
+
+    if (result == -1)
+    {
+        printf("Character not found");
+    }
+    else
+    {
+        printf("Character found at position %d", result + 1);
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter a sorted string: ACEGIK
+Enter character to search: G</pre>
+
+<b>Output:</b>
+<pre>Character found at position 4</pre>
+
+<h2>Program 7: Binary Search Through Recursion on Integer Array</h2>
+
+<pre>#include &lt;stdio.h&gt;
+
+int binarySearch(int a[], int low, int high, int key)
+{
+    int mid;
+
+    if (low &gt; high)
+    {
+        return -1;
+    }
+
+    mid = (low + high) / 2;
+
+    if (a[mid] == key)
+    {
+        return mid;
+    }
+
+    if (key &lt; a[mid])
+    {
+        return binarySearch(a, low, mid - 1, key);
+    }
+
+    return binarySearch(a, mid + 1, high, key);
+}
+
+int main()
+{
+    int a[100], n, key, i, result;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter sorted array elements:\n");
+
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf("%d", &amp;a[i]);
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    result = binarySearch(a, 0, n - 1, key);
+
+    if (result == -1)
+    {
+        printf("Element not found");
+    }
+    else
+    {
+        printf("Element found at position %d", result + 1);
+    }
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter sorted array elements:
+10 20 30 40 50
+Enter value to search: 30</pre>
+
+<b>Output:</b>
+<pre>Element found at position 3</pre>
+
+<h2>Program 8: Binary Search Through Iteration on String</h2>
+
+<pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char str[100], key;
+    int low, high, mid, n;
+
+    printf("Enter a sorted string: ");
+    scanf("%s", str);
+
+    printf("Enter character to search: ");
+    scanf(" %c", &amp;key);
+
+    n = strlen(str);
+
+    low = 0;
+    high = n - 1;
+
+    while (low &lt;= high)
+    {
+        mid = (low + high) / 2;
+
+        if (str[mid] == key)
+        {
+            printf("Character found at position %d", mid + 1);
+            return 0;
+        }
+        else if (key &lt; str[mid])
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+
+    printf("Character not found");
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter a sorted string: ACEGIK
+Enter character to search: I</pre>
+
+<b>Output:</b>
+<pre>Character found at position 5</pre>
+
+<h2>Program 9: Calculate Best and Worst Complexity of Linear Search</h2>
+
+<pre>#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+int main()
+{
+    int a[100000], n, key, i;
+    int comparisons;
+    clock_t start, end;
+    double timeTaken;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter array elements:\n");
+
+    for (i = 0; i &lt; n; i++)
+    {
+        a[i] = i + 1;
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    comparisons = 0;
+
+    start = clock();
+
+    for (i = 0; i &lt; n; i++)
+    {
+        comparisons++;
+
+        if (a[i] == key)
+        {
+            break;
+        }
+    }
+
+    end = clock();
+
+    timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
+
+    if (i == n)
+    {
+        printf("Element not found\n");
+    }
+    else
+    {
+        printf("Element found at position %d\n", i + 1);
+    }
+
+    printf("Number of comparisons: %d\n", comparisons);
+    printf("Time taken: %f seconds\n", timeTaken);
+
+    printf("\nBest Case Complexity: O(1)");
+    printf("\nWorst Case Complexity: O(n)");
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter value to search: 1</pre>
+
+<b>Output:</b>
+<pre>Element found at position 1
+Number of comparisons: 1
+Time taken: 0.000002 seconds
+
+Best Case Complexity: O(1)
+Worst Case Complexity: O(n)</pre>
+
+<h2>Program 10: Calculate Best and Worst Complexity of Binary Search</h2>
+
+<pre>#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+int main()
+{
+    int a[100000], n, key;
+    int low, high, mid, i, comparisons;
+    clock_t start, end;
+    double timeTaken;
+
+    printf("Enter array size: ");
+    scanf("%d", &amp;n);
+
+    for (i = 0; i &lt; n; i++)
+    {
+        a[i] = i + 1;
+    }
+
+    printf("Enter value to search: ");
+    scanf("%d", &amp;key);
+
+    low = 0;
+    high = n - 1;
+    comparisons = 0;
+
+    start = clock();
+
+    while (low &lt;= high)
+    {
+        mid = (low + high) / 2;
+        comparisons++;
+
+        if (a[mid] == key)
+        {
+            break;
+        }
+        else if (key &lt; a[mid])
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+
+    end = clock();
+
+    timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
+
+    if (low &lt;= high)
+    {
+        printf("Element found at position %d\n", mid + 1);
+    }
+    else
+    {
+        printf("Element not found\n");
+    }
+
+    printf("Number of comparisons: %d\n", comparisons);
+    printf("Time taken: %f seconds\n", timeTaken);
+
+    printf("\nBest Case Complexity: O(1)");
+    printf("\nWorst Case Complexity: O(log n)");
+
+    return 0;
+}</pre>
+
+<b>Input:</b>
+<pre>Enter array size: 5
+Enter value to search: 3</pre>
+
+<b>Output:</b>
+<pre>Element found at position 3
+Number of comparisons: 1
+Time taken: 0.000002 seconds
+
+Best Case Complexity: O(1)
+Worst Case Complexity: O(log n)</pre>
+
+<a href="index.html">Back to Home</a>
+
+</body>
+</html>

@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linked List Programs</title>
+
+    <style>
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            background-color: #dfe6e9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            color:#3970de;
+            border-left: 5px solid #3970de;
+            padding-left: 10px;
+        }
+
+        pre {
+            background-color: #589db0;
+            color: #dfe6e9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        a {
+            display: block;
+            width: 150px;
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            text-decoration: none;
+            background-color: #0984e3;
+            color: white;
+            border-radius: 6px;
+        }
+
+        a:hover {
+            background-color: #4e8cff;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>LINKED LIST PROGRAMS</h1>
+
+<h2>PROGRAM 1 - SINGLY LINKED LIST (INTEGER)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = head;
+    head = p;
+}
+
+void insertEnd(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = NULL;
+    if (head == NULL) {
+        head = p;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void insertPos(int x, int pos) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    int i;
+    if (p == NULL || pos &lt; 1)
+        return;
+    p-&gt;data = x;
+    if (pos == 1) {
+        p-&gt;next = head;
+        head = p;
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL) {
+        free(p);
+        return;
+    }
+    p-&gt;next = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    head = head-&gt;next;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (t-&gt;next-&gt;next != NULL)
+        t = t-&gt;next;
+    free(t-&gt;next);
+    t-&gt;next = NULL;
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL || t-&gt;next == NULL)
+        return;
+    p = t-&gt;next;
+    t-&gt;next = p-&gt;next;
+    free(p);
+}
+
+void display() {
+    struct Node *t = head;
+    while (t != NULL) {
+        printf("%d ", t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+void search(int x) {
+    struct Node *t = head;
+    int pos = 1;
+    while (t != NULL) {
+        if (t-&gt;data == x) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin(20);
+    insertBegin(10);
+    insertEnd(40);
+    insertPos(30, 3);
+    display();
+    search(30);
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+20 10 40
+Insert 30 at position 3
+Search 30
+</pre>
+
+Output :<pre>
+10 20 30 40
+Found at position 3
+30
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 2 - SINGLY CIRCULAR LINKED LIST (INTEGER)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    if (head == NULL) {
+        head = p;
+        p-&gt;next = head;
+        return;
+    }
+    while (t-&gt;next != head)
+        t = t-&gt;next;
+    p-&gt;next = head;
+    t-&gt;next = p;
+    head = p;
+}
+
+void insertEnd(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    if (head == NULL) {
+        head = p;
+        p-&gt;next = head;
+        return;
+    }
+    while (t-&gt;next != head)
+        t = t-&gt;next;
+    t-&gt;next = p;
+    p-&gt;next = head;
+}
+
+void insertPos(int x, int pos) {
+    struct Node *p;
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    if (head == NULL)
+        return;
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos - 1)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    struct Node *last = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (last-&gt;next != head)
+        last = last-&gt;next;
+    head = head-&gt;next;
+    last-&gt;next = head;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    struct Node *p;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (t-&gt;next-&gt;next != head)
+        t = t-&gt;next;
+    p = t-&gt;next;
+    t-&gt;next = head;
+    free(p);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (t-&gt;next == head)
+        return;
+    p = t-&gt;next;
+    t-&gt;next = p-&gt;next;
+    free(p);
+}
+
+void display() {
+    struct Node *t = head;
+    if (head == NULL) {
+        printf("List is empty\\n");
+        return;
+    }
+    do {
+        printf("%d ", t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf("\\n");
+}
+
+void search(int x) {
+    struct Node *t = head;
+    int pos = 1;
+    if (head == NULL) {
+        printf("Not Found\\n");
+        return;
+    }
+    do {
+        if (t-&gt;data == x) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin(20);
+    insertBegin(10);
+    insertEnd(40);
+    insertPos(30, 3);
+    display();
+    search(30);
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Insert 20 at beginning
+Insert 10 at beginning
+Insert 40 at end
+Insert 30 at position 3
+Search 30
+</pre>
+
+Output <pre>
+10 20 30 40
+Found at position 3
+30
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 3 - DOUBLY LINKED LIST (INTEGER)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;prev = NULL;
+    p-&gt;next = head;
+    if (head != NULL)
+        head-&gt;prev = p;
+    head = p;
+}
+
+void insertEnd(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = NULL;
+    if (head == NULL) {
+        p-&gt;prev = NULL;
+        head = p;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = p;
+    p-&gt;prev = t;
+}
+
+void insertPos(int x, int pos) {
+    struct Node *p;
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = t-&gt;next;
+    p-&gt;prev = t;
+    if (t-&gt;next != NULL)
+        t-&gt;next-&gt;prev = p;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    head = head-&gt;next;
+    if (head != NULL)
+        head-&gt;prev = NULL;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    if (t-&gt;prev != NULL)
+        t-&gt;prev-&gt;next = NULL;
+    else
+        head = NULL;
+    free(t);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1 || head == NULL)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL)
+        return;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    if (t-&gt;next != NULL)
+        t-&gt;next-&gt;prev = t-&gt;prev;
+    free(t);
+}
+
+void display() {
+    struct Node *t = head;
+    while (t != NULL) {
+        printf("%d ", t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+void search(int x) {
+    struct Node *t = head;
+    int pos = 1;
+    while (t != NULL) {
+        if (t-&gt;data == x) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin(20);
+    insertBegin(10);
+    insertEnd(40);
+    insertPos(30, 3);
+    display();
+    search(30);
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Insert 20 at beginning
+Insert 10 at beginning
+Insert 40 at end
+Insert 30 at position 3
+Search 30
+</pre>
+
+Output :<pre>
+10 20 30 40
+Found at position 3
+30
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 4 - DOUBLY CIRCULAR LINKED LIST (INTEGER)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *last;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    if (head == NULL) {
+        p-&gt;next = p;
+        p-&gt;prev = p;
+        head = p;
+        return;
+    }
+    last = head-&gt;prev;
+    p-&gt;next = head;
+    p-&gt;prev = last;
+    last-&gt;next = p;
+    head-&gt;prev = p;
+    head = p;
+}
+
+void insertEnd(int x) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *last;
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    if (head == NULL) {
+        p-&gt;next = p;
+        p-&gt;prev = p;
+        head = p;
+        return;
+    }
+    last = head-&gt;prev;
+    p-&gt;next = head;
+    p-&gt;prev = last;
+    last-&gt;next = p;
+    head-&gt;prev = p;
+}
+
+void insertPos(int x, int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    if (head == NULL)
+        return;
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos - 1)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    p-&gt;data = x;
+    p-&gt;next = t-&gt;next;
+    p-&gt;prev = t;
+    t-&gt;next-&gt;prev = p;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *last;
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    last = head-&gt;prev;
+    head = head-&gt;next;
+    head-&gt;prev = last;
+    last-&gt;next = head;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *last;
+    if (head == NULL)
+        return;
+    last = head-&gt;prev;
+    if (last == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    last-&gt;prev-&gt;next = head;
+    head-&gt;prev = last-&gt;prev;
+    free(last);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos)
+        return;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    t-&gt;next-&gt;prev = t-&gt;prev;
+    free(t);
+}
+
+void display() {
+    struct Node *t = head;
+    if (head == NULL) {
+        printf("List is empty\\n");
+        return;
+    }
+    do {
+        printf("%d ", t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf("\\n");
+}
+
+void search(int x) {
+    struct Node *t = head;
+    int pos = 1;
+    if (head == NULL) {
+        printf("Not Found\\n");
+        return;
+    }
+    do {
+        if (t-&gt;data == x) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin(20);
+    insertBegin(10);
+    insertEnd(40);
+    insertPos(30, 3);
+    display();
+    search(30);
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Insert 20 at beginning
+Insert 10 at beginning
+Insert 40 at end
+Insert 30 at position 3
+Search 30
+</pre>
+
+Output :<pre>
+10 20 30 40
+Found at position 3
+30
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 5 - SINGLY LINKED LIST (STRING)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct Node {
+    char data[50];
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = head;
+    head = p;
+}
+
+void insertEnd(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = NULL;
+    if (head == NULL) {
+        head = p;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void insertPos(char x[], int pos) {
+    struct Node *p;
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    head = head-&gt;next;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (t-&gt;next-&gt;next != NULL)
+        t = t-&gt;next;
+    free(t-&gt;next);
+    t-&gt;next = NULL;
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL || t-&gt;next == NULL)
+        return;
+    p = t-&gt;next;
+    t-&gt;next = p-&gt;next;
+    free(p);
+}
+
+void display() {
+    struct Node *t = head;
+    while (t != NULL) {
+        printf("%s ", t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+void search(char x[]) {
+    struct Node *t = head;
+    int pos = 1;
+    while (t != NULL) {
+        if (strcmp(t-&gt;data, x) == 0) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin("Apple");
+    insertBegin("Mango");
+    insertEnd("Orange");
+    insertPos("Banana", 3);
+    display();
+    search("Banana");
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Mango
+Apple
+Orange
+Insert Banana at position 3
+Search Banana
+</pre>
+
+Output :<pre>
+Mango Apple Banana Orange
+Found at position 3
+Banana
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 6 - SINGLY CIRCULAR LINKED LIST (STRING)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct Node {
+    char data[50];
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    if (head == NULL) {
+        head = p;
+        p-&gt;next = head;
+        return;
+    }
+    while (t-&gt;next != head)
+        t = t-&gt;next;
+    p-&gt;next = head;
+    t-&gt;next = p;
+    head = p;
+}
+
+void insertEnd(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    if (head == NULL) {
+        head = p;
+        p-&gt;next = head;
+        return;
+    }
+    while (t-&gt;next != head)
+        t = t-&gt;next;
+    t-&gt;next = p;
+    p-&gt;next = head;
+}
+
+void insertPos(char x[], int pos) {
+    struct Node *p;
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    if (head == NULL)
+        return;
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos - 1)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = t-&gt;next;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    struct Node *last = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (last-&gt;next != head)
+        last = last-&gt;next;
+    head = head-&gt;next;
+    last-&gt;next = head;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    struct Node *p;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    while (t-&gt;next-&gt;next != head)
+        t = t-&gt;next;
+    p = t-&gt;next;
+    t-&gt;next = head;
+    free(p);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (t-&gt;next == head)
+        return;
+    p = t-&gt;next;
+    t-&gt;next = p-&gt;next;
+    free(p);
+}
+
+void display() {
+    struct Node *t = head;
+    if (head == NULL) {
+        printf("List is empty\\n");
+        return;
+    }
+    do {
+        printf("%s ", t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf("\\n");
+}
+
+void search(char x[]) {
+    struct Node *t = head;
+    int pos = 1;
+    if (head == NULL) {
+        printf("Not Found\\n");
+        return;
+    }
+    do {
+        if (strcmp(t-&gt;data, x) == 0) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin("Apple");
+    insertBegin("Mango");
+    insertEnd("Orange");
+    insertPos("Banana", 3);
+    display();
+    search("Banana");
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Mango
+Apple
+Orange
+Insert Banana at position 3
+Search Banana
+</pre>
+
+Output :<pre>
+Mango Apple Banana Orange
+Found at position 3
+Banana
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 7 - DOUBLY LINKED LIST (STRING)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct Node {
+    char data[50];
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;prev = NULL;
+    p-&gt;next = head;
+    if (head != NULL)
+        head-&gt;prev = p;
+    head = p;
+}
+
+void insertEnd(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *t = head;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = NULL;
+    if (head == NULL) {
+        p-&gt;prev = NULL;
+        head = p;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = p;
+    p-&gt;prev = t;
+}
+
+void insertPos(char x[], int pos) {
+    struct Node *p;
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = t-&gt;next;
+    p-&gt;prev = t;
+    if (t-&gt;next != NULL)
+        t-&gt;next-&gt;prev = p;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    head = head-&gt;next;
+    if (head != NULL)
+        head-&gt;prev = NULL;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    if (t-&gt;prev != NULL)
+        t-&gt;prev-&gt;next = NULL;
+    else
+        head = NULL;
+    free(t);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    int i;
+    if (pos &lt; 1 || head == NULL)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos &amp;&amp; t != NULL; i++)
+        t = t-&gt;next;
+    if (t == NULL)
+        return;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    if (t-&gt;next != NULL)
+        t-&gt;next-&gt;prev = t-&gt;prev;
+    free(t);
+}
+
+void display() {
+    struct Node *t = head;
+    while (t != NULL) {
+        printf("%s ", t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+void search(char x[]) {
+    struct Node *t = head;
+    int pos = 1;
+    while (t != NULL) {
+        if (strcmp(t-&gt;data, x) == 0) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin("Apple");
+    insertBegin("Mango");
+    insertEnd("Orange");
+    insertPos("Banana", 3);
+    display();
+    search("Banana");
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Mango
+Apple
+Orange
+Insert Banana at position 3
+Search Banana
+</pre>
+
+Output :<pre>
+Mango Apple Banana Orange
+Found at position 3
+Banana
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 8 - DOUBLY CIRCULAR LINKED LIST (STRING)</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct Node {
+    char data[50];
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+int isEmpty() {
+    return head == NULL;
+}
+
+int isFull() {
+    struct Node *p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return 1;
+    free(p);
+    return 0;
+}
+
+void insertBegin(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *last;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    if (head == NULL) {
+        p-&gt;next = p;
+        p-&gt;prev = p;
+        head = p;
+        return;
+    }
+    last = head-&gt;prev;
+    p-&gt;next = head;
+    p-&gt;prev = last;
+    last-&gt;next = p;
+    head-&gt;prev = p;
+    head = p;
+}
+
+void insertEnd(char x[]) {
+    struct Node *p = malloc(sizeof(struct Node));
+    struct Node *last;
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    if (head == NULL) {
+        p-&gt;next = p;
+        p-&gt;prev = p;
+        head = p;
+        return;
+    }
+    last = head-&gt;prev;
+    p-&gt;next = head;
+    p-&gt;prev = last;
+    last-&gt;next = p;
+    head-&gt;prev = p;
+}
+
+void insertPos(char x[], int pos) {
+    struct Node *t = head;
+    struct Node *p;
+    int i;
+    if (pos &lt; 1)
+        return;
+    if (pos == 1) {
+        insertBegin(x);
+        return;
+    }
+    if (head == NULL)
+        return;
+    for (i = 1; i &lt; pos - 1 &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos - 1)
+        return;
+    p = malloc(sizeof(struct Node));
+    if (p == NULL)
+        return;
+    strcpy(p-&gt;data, x);
+    p-&gt;next = t-&gt;next;
+    p-&gt;prev = t;
+    t-&gt;next-&gt;prev = p;
+    t-&gt;next = p;
+}
+
+void deleteBegin() {
+    struct Node *last;
+    struct Node *t = head;
+    if (head == NULL)
+        return;
+    if (head-&gt;next == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    last = head-&gt;prev;
+    head = head-&gt;next;
+    head-&gt;prev = last;
+    last-&gt;next = head;
+    free(t);
+}
+
+void deleteEnd() {
+    struct Node *last;
+    if (head == NULL)
+        return;
+    last = head-&gt;prev;
+    if (last == head) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    last-&gt;prev-&gt;next = head;
+    head-&gt;prev = last-&gt;prev;
+    free(last);
+}
+
+void deletePos(int pos) {
+    struct Node *t = head;
+    int i;
+    if (head == NULL || pos &lt; 1)
+        return;
+    if (pos == 1) {
+        deleteBegin();
+        return;
+    }
+    for (i = 1; i &lt; pos &amp;&amp; t-&gt;next != head; i++)
+        t = t-&gt;next;
+    if (i != pos)
+        return;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    t-&gt;next-&gt;prev = t-&gt;prev;
+    free(t);
+}
+
+void display() {
+    struct Node *t = head;
+    if (head == NULL) {
+        printf("List is empty\\n");
+        return;
+    }
+    do {
+        printf("%s ", t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf("\\n");
+}
+
+void search(char x[]) {
+    struct Node *t = head;
+    int pos = 1;
+    if (head == NULL) {
+        printf("Not Found\\n");
+        return;
+    }
+    do {
+        if (strcmp(t-&gt;data, x) == 0) {
+            printf("Found at position %d\\n", pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf("Not Found\\n");
+}
+
+int main() {
+    insertBegin("Apple");
+    insertBegin("Mango");
+    insertEnd("Orange");
+    insertPos("Banana", 3);
+    display();
+    search("Banana");
+    deleteBegin();
+    deleteEnd();
+    deletePos(1);
+    display();
+    printf("Empty: %d\\n", isEmpty());
+    printf("Full: %d\\n", isFull());
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Mango
+Apple
+Orange
+Insert Banana at position 3
+Search Banana
+</pre>
+
+Output :<pre>
+Mango Apple Banana Orange
+Found at position 3
+Banana
+Empty: 0
+Full: 0
+</pre>
+
+<h2>PROGRAM 9 - ADDITION OF TWO POLYNOMIALS</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int coeff;
+    int power;
+    struct Node *next;
+};
+
+struct Node *createTerm(int c, int p) {
+    struct Node *t = malloc(sizeof(struct Node));
+    t-&gt;coeff = c;
+    t-&gt;power = p;
+    t-&gt;next = NULL;
+    return t;
+}
+
+void insert(struct Node **head, int c, int p) {
+    struct Node *t = *head;
+    struct Node *n = createTerm(c, p);
+    if (*head == NULL) {
+        *head = n;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = n;
+}
+
+struct Node *add(struct Node *a, struct Node *b) {
+    struct Node *result = NULL;
+    while (a != NULL &amp;&amp; b != NULL) {
+        if (a-&gt;power == b-&gt;power) {
+            insert(&amp;result, a-&gt;coeff + b-&gt;coeff, a-&gt;power);
+            a = a-&gt;next;
+            b = b-&gt;next;
+        } else if (a-&gt;power &gt; b-&gt;power) {
+            insert(&amp;result, a-&gt;coeff, a-&gt;power);
+            a = a-&gt;next;
+        } else {
+            insert(&amp;result, b-&gt;coeff, b-&gt;power);
+            b = b-&gt;next;
+        }
+    }
+    while (a != NULL) {
+        insert(&amp;result, a-&gt;coeff, a-&gt;power);
+        a = a-&gt;next;
+    }
+    while (b != NULL) {
+        insert(&amp;result, b-&gt;coeff, b-&gt;power);
+        b = b-&gt;next;
+    }
+    return result;
+}
+
+void display(struct Node *t) {
+    while (t != NULL) {
+        printf("%dx^%d", t-&gt;coeff, t-&gt;power);
+        if (t-&gt;next != NULL)
+            printf(" + ");
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+int main() {
+    struct Node *a = NULL;
+    struct Node *b = NULL;
+    struct Node *result;
+    int n, i, c, p;
+
+    printf("Enter number of terms in first polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;a, c, p);
+    }
+
+    printf("Enter number of terms in second polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;b, c, p);
+    }
+
+    result = add(a, b);
+    printf("Result: ");
+    display(result);
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Enter number of terms in first polynomial: 3
+Enter coefficient and power:
+5 2
+4 1
+2 0
+
+Enter number of terms in second polynomial: 3
+Enter coefficient and power:
+3 2
+2 1
+1 0
+</pre>
+
+Output :<pre>
+Result: 8x^2 + 6x^1 + 3x^0
+</pre>
+
+<h2>PROGRAM 10 - SUBTRACTION OF TWO POLYNOMIALS</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int coeff;
+    int power;
+    struct Node *next;
+};
+
+struct Node *createTerm(int c, int p) {
+    struct Node *t = malloc(sizeof(struct Node));
+    t-&gt;coeff = c;
+    t-&gt;power = p;
+    t-&gt;next = NULL;
+    return t;
+}
+
+void insert(struct Node **head, int c, int p) {
+    struct Node *t = *head;
+    struct Node *n = createTerm(c, p);
+    if (*head == NULL) {
+        *head = n;
+        return;
+    }
+    while (t-&gt;next != NULL)
+        t = t-&gt;next;
+    t-&gt;next = n;
+}
+
+struct Node *subtract(struct Node *a, struct Node *b) {
+    struct Node *result = NULL;
+    while (a != NULL &amp;&amp; b != NULL) {
+        if (a-&gt;power == b-&gt;power) {
+            insert(&amp;result, a-&gt;coeff - b-&gt;coeff, a-&gt;power);
+            a = a-&gt;next;
+            b = b-&gt;next;
+        } else if (a-&gt;power &gt; b-&gt;power) {
+            insert(&amp;result, a-&gt;coeff, a-&gt;power);
+            a = a-&gt;next;
+        } else {
+            insert(&amp;result, -b-&gt;coeff, b-&gt;power);
+            b = b-&gt;next;
+        }
+    }
+    while (a != NULL) {
+        insert(&amp;result, a-&gt;coeff, a-&gt;power);
+        a = a-&gt;next;
+    }
+    while (b != NULL) {
+        insert(&amp;result, -b-&gt;coeff, b-&gt;power);
+        b = b-&gt;next;
+    }
+    return result;
+}
+
+void display(struct Node *t) {
+    while (t != NULL) {
+        printf("%dx^%d", t-&gt;coeff, t-&gt;power);
+        if (t-&gt;next != NULL)
+            printf(" + ");
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+int main() {
+    struct Node *a = NULL;
+    struct Node *b = NULL;
+    struct Node *result;
+    int n, i, c, p;
+
+    printf("Enter number of terms in first polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;a, c, p);
+    }
+
+    printf("Enter number of terms in second polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;b, c, p);
+    }
+
+    result = subtract(a, b);
+    printf("Result: ");
+    display(result);
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Enter number of terms in first polynomial: 3
+Enter coefficient and power:
+5 2
+4 1
+2 0
+
+Enter number of terms in second polynomial: 3
+Enter coefficient and power:
+3 2
+2 1
+1 0
+</pre>
+
+Output :<pre>
+Result: 2x^2 + 2x^1 + 1x^0
+</pre>
+
+<h2>PROGRAM 11 - MULTIPLICATION OF TWO POLYNOMIALS</h2>
+
+<pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node {
+    int coeff;
+    int power;
+    struct Node *next;
+};
+
+struct Node *createTerm(int c, int p) {
+    struct Node *t = malloc(sizeof(struct Node));
+    t-&gt;coeff = c;
+    t-&gt;power = p;
+    t-&gt;next = NULL;
+    return t;
+}
+
+void insert(struct Node **head, int c, int p) {
+    struct Node *t = *head;
+    struct Node *n;
+    if (c == 0)
+        return;
+    if (*head == NULL) {
+        *head = createTerm(c, p);
+        return;
+    }
+    while (t-&gt;next != NULL &amp;&amp; t-&gt;next-&gt;power &gt; p)
+        t = t-&gt;next;
+    if (t-&gt;power == p) {
+        t-&gt;coeff += c;
+        return;
+    }
+    if (t-&gt;power &lt; p) {
+        n = createTerm(t-&gt;coeff, t-&gt;power);
+        n-&gt;next = t-&gt;next;
+        t-&gt;coeff = c;
+        t-&gt;power = p;
+        t-&gt;next = n;
+        return;
+    }
+    n = createTerm(c, p);
+    n-&gt;next = t-&gt;next;
+    t-&gt;next = n;
+}
+
+struct Node *multiply(struct Node *a, struct Node *b) {
+    struct Node *result = NULL;
+    struct Node *i;
+    struct Node *j;
+    for (i = a; i != NULL; i = i-&gt;next) {
+        for (j = b; j != NULL; j = j-&gt;next) {
+            insert(&amp;result, i-&gt;coeff * j-&gt;coeff,
+                   i-&gt;power + j-&gt;power);
+        }
+    }
+    return result;
+}
+
+void display(struct Node *t) {
+    if (t == NULL) {
+        printf("0\\n");
+        return;
+    }
+    while (t != NULL) {
+        printf("%dx^%d", t-&gt;coeff, t-&gt;power);
+        if (t-&gt;next != NULL)
+            printf(" + ");
+        t = t-&gt;next;
+    }
+    printf("\\n");
+}
+
+int main() {
+    struct Node *a = NULL;
+    struct Node *b = NULL;
+    struct Node *result;
+    int n, i, c, p;
+
+    printf("Enter number of terms in first polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;a, c, p);
+    }
+
+    printf("Enter number of terms in second polynomial: ");
+    scanf("%d", &amp;n);
+    for (i = 0; i &lt; n; i++) {
+        printf("Enter coefficient and power: ");
+        scanf("%d%d", &amp;c, &amp;p);
+        insert(&amp;b, c, p);
+    }
+
+    result = multiply(a, b);
+    printf("Result: ");
+    display(result);
+    return 0;
+}
+</pre>
+
+Input :
+<pre>
+Enter number of terms in first polynomial: 2
+Enter coefficient and power:
+2 1
+1 0
+
+Enter number of terms in second polynomial: 2
+Enter coefficient and power:
+3 1
+4 0
+</pre>
+
+Output :<pre>
+Result: 6x^2 + 11x^1 + 4x^0
+</pre>
+
+<a href="index.html">Back to Home</a>
+
+</body>
+</html>
+```
